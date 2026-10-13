@@ -42,6 +42,8 @@ from .fixtures import (
     VICTRON_SMART_LITHIUM_TOKEN,
     VICTRON_SOLAR_CHARGER_SERVICE_INFO,
     VICTRON_SOLAR_CHARGER_TOKEN,
+    VICTRON_SOLAR_SENSE_SERVICE_INFO,
+    VICTRON_SOLAR_SENSE_TOKEN,
     VICTRON_VEBUS_BAD_KEY_SERVICE_INFO,
     VICTRON_VEBUS_SERVICE_INFO,
     VICTRON_VEBUS_TOKEN,
@@ -161,6 +163,30 @@ async def test_sensors(
 
     # Use snapshot testing to verify all entity states and registry entries
     await snapshot_platform(hass, entity_registry, snapshot, entry.entry_id)
+
+
+@pytest.mark.usefixtures("enable_bluetooth")
+async def test_solar_sense_sensors(hass: HomeAssistant) -> None:
+    """Test SolarSense exposes its decoded measurements as sensors."""
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        data={CONF_ACCESS_TOKEN: VICTRON_SOLAR_SENSE_TOKEN},
+        unique_id=VICTRON_SOLAR_SENSE_SERVICE_INFO.address,
+    )
+    entry.add_to_hass(hass)
+
+    assert await hass.config_entries.async_setup(entry.entry_id)
+    inject_bluetooth_service_info(hass, VICTRON_SOLAR_SENSE_SERVICE_INFO)
+    await hass.async_block_till_done()
+
+    sensor_states = {
+        state.attributes.get("device_class"): state for state in hass.states.async_all()
+    }
+    assert sensor_states["power"].state == "0"
+    assert sensor_states["energy"].state == "20"
+    assert sensor_states["irradiance"].state == "0.0"
+    assert sensor_states["temperature"].state == "21.1"
+    assert sensor_states["irradiance"].attributes["unit_of_measurement"] == "W/m²"
 
 
 def _inject_bad_advertisement(hass: HomeAssistant, seq: int = 0) -> None:

@@ -27,6 +27,7 @@ from homeassistant.const import (
     UnitOfElectricCurrent,
     UnitOfElectricPotential,
     UnitOfEnergy,
+    UnitOfIrradiance,
     UnitOfPower,
     UnitOfTemperature,
     UnitOfTime,
@@ -293,6 +294,13 @@ SENSOR_DESCRIPTIONS = {
         native_unit_of_measurement=UnitOfElectricPotential.VOLT,
         state_class=SensorStateClass.MEASUREMENT,
     ),
+    Keys.IRRADIANCE: VictronBLESensorEntityDescription(
+        key=Keys.IRRADIANCE,
+        translation_key=Keys.IRRADIANCE,
+        device_class=SensorDeviceClass.IRRADIANCE,
+        native_unit_of_measurement=UnitOfIrradiance.WATTS_PER_SQUARE_METER,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
     Keys.METER_TYPE: VictronBLESensorEntityDescription(
         key=Keys.METER_TYPE,
         device_class=SensorDeviceClass.ENUM,
@@ -488,6 +496,13 @@ SENSOR_DESCRIPTIONS = {
         native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
         state_class=SensorStateClass.MEASUREMENT,
         translation_placeholders={"phase": "3"},
+    ),
+    Keys.PANEL_TEMPERATURE: VictronBLESensorEntityDescription(
+        key=Keys.PANEL_TEMPERATURE,
+        translation_key=Keys.PANEL_TEMPERATURE,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        state_class=SensorStateClass.MEASUREMENT,
     ),
 }
 

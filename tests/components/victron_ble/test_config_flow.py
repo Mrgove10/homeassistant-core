@@ -15,6 +15,8 @@ from homeassistant.data_entry_flow import FlowResultType
 from .fixtures import (
     NOT_VICTRON_SERVICE_INFO,
     VICTRON_INVERTER_RS_SERVICE_INFO,
+    VICTRON_SOLAR_SENSE_SERVICE_INFO,
+    VICTRON_SOLAR_SENSE_TOKEN,
     VICTRON_TEST_WRONG_TOKEN,
     VICTRON_VEBUS_SERVICE_INFO,
     VICTRON_VEBUS_TOKEN,
@@ -82,6 +84,27 @@ async def test_async_step_bluetooth_invalid_key_retry(hass: HomeAssistant) -> No
     )
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert result["title"] == VICTRON_VEBUS_SERVICE_INFO.name
+
+
+@pytest.mark.usefixtures("mock_setup_entry")
+async def test_async_step_bluetooth_solar_sense(hass: HomeAssistant) -> None:
+    """Test SolarSense uses the standard advertisement-key setup flow."""
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={"source": SOURCE_BLUETOOTH},
+        data=VICTRON_SOLAR_SENSE_SERVICE_INFO,
+    )
+    assert result["type"] is FlowResultType.FORM
+    assert result["step_id"] == "access_token"
+
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        user_input={CONF_ACCESS_TOKEN: VICTRON_SOLAR_SENSE_TOKEN},
+    )
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    flow_result = result["result"]
+    assert flow_result is not None
+    assert flow_result.data == {CONF_ACCESS_TOKEN: VICTRON_SOLAR_SENSE_TOKEN}
 
 
 @pytest.mark.parametrize(

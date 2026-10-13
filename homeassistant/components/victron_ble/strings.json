@@ -220,6 +220,9 @@
       "input_voltage": {
         "name": "Input voltage"
       },
+      "irradiance": {
+        "name": "Solar irradiance"
+      },
       "meter_type": {
         "name": "Meter type",
         "state": {
@@ -272,6 +275,9 @@
       },
       "output_voltage": {
         "name": "Output voltage"
+      },
+      "panel_temperature": {
+        "name": "Panel temperature"
       },
       "remaining_minutes": {
         "name": "Remaining minutes"

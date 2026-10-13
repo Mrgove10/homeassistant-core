@@ -186,6 +186,21 @@ VICTRON_SOLAR_CHARGER_SENSORS = {
     "solar_charger_external_device_load": "0.0",
 }
 
+# SolarSense 750
+VICTRON_SOLAR_SENSE_SERVICE_INFO = BluetoothServiceInfo(
+    name="SolarSense 750",
+    address="01:02:03:04:05:17",
+    rssi=-60,
+    manufacturer_data={
+        0x02E1: bytes.fromhex("100050c0ffc20c010514000400000020000000c0cac61afc"),
+    },
+    service_data={},
+    service_uuids=[],
+    source="local",
+)
+
+VICTRON_SOLAR_SENSE_TOKEN = "0123456789abcdef0123456789abcdef"
+
 # ve.bus
 
 VICTRON_VEBUS_SERVICE_INFO = BluetoothServiceInfo(
